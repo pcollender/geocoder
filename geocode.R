@@ -52,6 +52,18 @@ d_for_geocoding$geocodes <- mappp::mappp(d_for_geocoding$address,
                                       cache = TRUE,
                                       cache.name = 'geocoding_cache')
 
+lengths = sapply(d_for_geocoding$geocodes, length)
+
+while(any(lengths != 8 )){
+  d_for_geocoding$geocodes[lengths!=8] <- mappp::mappp(d_for_geocoding$address[lengths!=8],
+                                           geocode,
+                                           parallel = TRUE,
+                                           cache = TRUE,
+                                           cache.name = 'geocoding_cache')
+
+  lengths = sapply(d_for_geocoding$geocodes, length)  
+}
+
 ## extract results, if a tie then take first returned result
 d_for_geocoding <- d_for_geocoding %>%
   dplyr::mutate(row_index = 1:nrow(d_for_geocoding),
