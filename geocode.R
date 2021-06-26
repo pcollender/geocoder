@@ -54,8 +54,9 @@ d_for_geocoding$geocodes <- mappp::mappp(d_for_geocoding$address,
 
 lengths = sapply(d_for_geocoding$geocodes, length)
 
-while(any(lengths != 8 )){
-  d_for_geocoding$geocodes[lengths!=8] <- mappp::mappp(d_for_geocoding$address[lengths!=8],
+while(any(lengths < 8 )){
+  cat('\nrerunning geocoding for', sum(lengths < 8),'addresses due to parallel computation errors \n')
+  d_for_geocoding$geocodes[lengths<8] <- mappp::mappp(d_for_geocoding$address[lengths < 8],
                                            geocode,
                                            parallel = TRUE,
                                            cache = TRUE,
